@@ -161,11 +161,12 @@ public class EarthquakeCityMap extends PApplet {
 	// and returns true.  Notice that the helper method isInCountry will
 	// set this "country" property already.  Otherwise it returns false.
 	private boolean isLand(PointFeature earthquake) {
-		
-		// IMPLEMENT THIS: loop over all countries to check if location is in any of them
-		
-		// TODO: Implement this method using the helper method isInCountry
-		
+		// looping over countries to check if location is in any of them
+		for (Marker index: countryMarkers) {
+			if (isInCountry(earthquake, index)) 
+				return true;
+		}
+			
 		// not inside any country
 		return false;
 	}
@@ -178,7 +179,36 @@ public class EarthquakeCityMap extends PApplet {
 	// And LandQuakeMarkers have a "country" property set.
 	private void printQuakes() 
 	{
-		// TODO: Implement this method
+		int oceanQuake = 0; 
+		int quakeCounter = 0;
+		PointFeature landQuake = null;
+		ArrayList<Location> counted = 
+				new ArrayList<Location>();
+		
+		for (int c = 0; c < countryMarkers.size(); c++) {
+			Marker country = countryMarkers.get(c);
+			quakeCounter = 0;
+			
+			for (int q = 0; q < quakeMarkers.size(); q++) {
+				landQuake = new PointFeature(quakeMarkers.get(q).getLocation());
+				
+				if (isInCountry(landQuake, country)) 
+					quakeCounter++;
+				else if (isLand(landQuake) == false
+						&& (counted.contains(landQuake.getLocation()) == false)) { 
+					oceanQuake++;
+					counted.add(landQuake.getLocation());
+				}
+				
+			}
+			
+			if (quakeCounter > 0) 
+				System.out.println(country.getProperty("name")
+						+ ": " + quakeCounter);
+		}
+		
+		System.out.println("The number of quakes detected in the ocean were: " +
+				oceanQuake);
 	}
 	
 	
