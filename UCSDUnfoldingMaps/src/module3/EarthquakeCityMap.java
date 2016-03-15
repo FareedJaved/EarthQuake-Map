@@ -88,13 +88,58 @@ public class EarthquakeCityMap extends PApplet {
 	    int yellow = color(255, 255, 0);
 	    
 	    //TODO: Add code here as appropriate
+	    // Adding code that takes each location in the earthquake 
+	    for (int index = 0; index < earthquakes.size(); index++) {
+	    	PointFeature pf = earthquakes.get(index);
+	    	Object magnitude = pf.getProperty("magnitude");
+	    	Float magFloat = Float.parseFloat(magnitude.toString());
+	    	
+	    	// calling helper method 
+	    	SimplePointMarker markerToAdd = styleMarker(pf, magFloat);
+	    	markers.add(markerToAdd);
+	    }
+	    // adding the list of markers to the map so they get displayed 
+	    map.addMarkers(markers); 
 	}
+	
+	// Helper method takes an EarthQuake and its magnitude. 
+		// Returns a Marker that is styled depending on the magnitude.  
+		private SimplePointMarker styleMarker(PointFeature marky, Float magFloat) {
+			// Radius is how large the marker will be 
+			// Severity is the color the marker will be
+			int radius = 0; 
+			int severity = 0; 
 		
+			// Creating a marker with the parameter's location.
+			// Using Processing's color method to generate 
+		    // an int that represents the colors yellow, blue and red 
+			// to style the marker
+		    
+		    SimplePointMarker tempMarker = createMarker(marky); 
+		    
+	    	if (magFloat < 4.0) {
+	    		radius = 6; 
+	    		severity = color(0, 0, 255); // blue
+	    	}
+	    	else if (magFloat >= 4.0 && magFloat < 5.0) {
+	    		radius = 9;
+	    		severity = color(255, 255, 0); // yellow
+	    	}
+	    	else {
+	    		radius = 14;
+	    		severity = color(255,0,0); // red
+	    	}
+	    	
+	    	tempMarker.setRadius(radius);
+	    	tempMarker.setColor(severity);
+			
+			return tempMarker;
+		}
+		
+	// TODO: Implement this method and call it from setUp, if it helps	
 	// A suggested helper method that takes in an earthquake feature and 
 	// returns a SimplePointMarker for that earthquake
-	// TODO: Implement this method and call it from setUp, if it helps
-	private SimplePointMarker createMarker(PointFeature feature)
-	{
+	private SimplePointMarker createMarker(PointFeature feature) {
 		// finish implementing and use this method, if it helps.
 		return new SimplePointMarker(feature.getLocation());
 	}
@@ -104,13 +149,40 @@ public class EarthquakeCityMap extends PApplet {
 	    map.draw();
 	    addKey();
 	}
+	
 
-
-	// helper method to draw key in GUI
 	// TODO: Implement this method to draw the key
+	// helper method to draw key in GUI
 	private void addKey() 
 	{	
-		// Remember you can use Processing's graphics methods here
-	
+		// Drawing the key box and 
+		// making background color seafoam green
+		fill(0, 250, 154);
+		rect(10, 50, 175, 255, 7);
+		
+		// Title 
+		String title = "EarthQuake Key";
+		fill(50);
+		text(title, 60, 53, 70, 80); 
+		textAlign(CENTER);
+		
+		// The different levels of earthquake
+		fill(255, 0, 0); // red
+		ellipse(30, 115, 18, 18);
+		fill(105, 105, 105);
+		String eqMessage1 = "5.0+ magnitude";
+		text(eqMessage1, 75, 102, 70, 80);
+		
+		fill(255, 255, 0); // yellow 
+		ellipse(30, 170, 13, 13);
+		fill(105, 105, 105); 
+		String eqMessage2 = "4.0+ magnitude";
+		text(eqMessage2, 75, 157, 70, 80);
+		
+		fill(0, 0, 255);	// blue
+		ellipse(30, 225, 10, 10); 
+		fill(105, 105, 105);
+		String eqMessage3 = "Below 4.0"; 
+		text(eqMessage3, 75, 217, 70, 80);
 	}
 }
