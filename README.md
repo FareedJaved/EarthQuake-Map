@@ -1,2 +1,2 @@
 # EarthQuake-Map
-Mapping EarthQuake data onto a map provided by Google's Unfolding Maps
+Mapping EarthQuake data onto a map from Unfolding Maps using the Google Map Provider
