@@ -20,8 +20,8 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
- * Date: July 17, 2015
+ * @author Fareed
+ * Date: May 23, 2016
  * */
 public class EarthquakeCityMap extends PApplet {
 	
@@ -41,7 +41,8 @@ public class EarthquakeCityMap extends PApplet {
 	public static String mbTilesString = "blankLight-1-3.mbtiles";
 	
 	//feed with magnitude 2.5+ Earthquakes
-	private String earthquakesURL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
+	private String earthquakesURL = 
+			"http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
 	
 	// The files containing city names and info and country names and info
 	private String cityFile = "city-data.json";
@@ -105,7 +106,7 @@ public class EarthquakeCityMap extends PApplet {
 	    }
 
 	    // could be used for debugging
-	    printQuakes();
+	    // printQuakes();
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
@@ -133,8 +134,8 @@ public class EarthquakeCityMap extends PApplet {
 		if (lastSelected != null) {
 			lastSelected.setSelected(false);
 			lastSelected = null;
-		
 		}
+		
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
 	}
@@ -145,7 +146,14 @@ public class EarthquakeCityMap extends PApplet {
 	// 
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
-		// TODO: Implement this method
+		// At this point we always know that lastSelected is null 
+		for(Marker i: markers) {
+			if (i.isInside(map, mouseX, mouseY)) {
+				i.setSelected(true);
+				lastSelected = (CommonMarker) i;
+				break;
+			}
+		}
 	}
 	
 	/** The event handler for mouse clicks
@@ -154,13 +162,27 @@ public class EarthquakeCityMap extends PApplet {
 	 * where the city is in the threat circle
 	 */
 	@Override
-	public void mouseClicked()
-	{
-		// TODO: Implement this method
-		// Hint: You probably want a helper method or two to keep this code
-		// from getting too long/disorganized
+	public void mouseClicked() {
+		if (lastClicked != null) {
+			unhideMarkers();
+			lastClicked = null;
+		}
+		else { // lastClicked is null
+			checkEarthquakesForClick();
+			if (lastClicked == null) {
+				checkCitiesForClick();
+			}
+
+		}
 	}
 	
+	public void checkCitiesForClick() {
+		
+	}
+	
+	public void checkEarthquakesForClick() {
+		
+	}
 	
 	// loop over and unhide all markers
 	private void unhideMarkers() {
@@ -253,10 +275,11 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		
 		// not inside any country
-		return false;
+		return false; 
 	}
 	
 	// prints countries with number of earthquakes
+	// For debugging purposes 
 	private void printQuakes() {
 		int totalWaterQuakes = quakeMarkers.size();
 		for (Marker country : countryMarkers) {
