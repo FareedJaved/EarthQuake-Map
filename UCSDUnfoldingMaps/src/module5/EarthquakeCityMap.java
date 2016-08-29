@@ -176,11 +176,16 @@ public class EarthquakeCityMap extends PApplet {
 		}
 	}
 	
-	public void checkCitiesForClick() {
-		
+	// Helper method for mouseClicked 
+	// Checks if the mouse coordinates
+	// exist in a country 
+	private void checkCitiesForClick() {
+		for(Marker m: cityMarkers) {
+			
+		}
 	}
 	
-	public void checkEarthquakesForClick() {
+	private void checkEarthquakesForClick() {
 		
 	}
 	
